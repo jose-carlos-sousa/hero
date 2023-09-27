@@ -6,18 +6,13 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
-
 import java.io.IOException;
 
 public class Game {
     private int x = 20;
     private int y = 10;
-    private Screen screen;
-    public static void main(String[] args) throws IOException {
-        Game game = new Game();
-        game.run();
-
-    }
+    private final Screen screen;
+    private final Hero hero;
 
     public Game() throws IOException {
         TerminalSize terminalSize = new TerminalSize(40, 20);
@@ -30,15 +25,13 @@ public class Game {
         screen.startScreen(); // screens must be started
         screen.doResizeIfNecessary();
 
+        hero = new Hero(10, 10);
     }
 
     private void draw() throws IOException {
         screen.clear();
-        screen.setCharacter(x, y, TextCharacter.fromCharacter('X')
-                [0]);
+        hero.draw(screen);
         screen.refresh();
-
-
     }
     private boolean  processKey(KeyStroke key) throws IOException {
         System.out.println(key);
@@ -49,17 +42,17 @@ public class Game {
         }
 
         if (key.getKeyType() == KeyType.ArrowUp){
-            y-=1;
+            hero.moveUp();
 
         }
         if (key.getKeyType() == KeyType.ArrowDown){
-            y+=1;
+            hero.moveDown();
         }
         if (key.getKeyType() == KeyType.ArrowLeft){
-            x-=1;
+            hero.moveLeft();
         }
         if (key.getKeyType() == KeyType.ArrowRight){
-            x+=1;
+            hero.moveRight();
         }
 
         if (key.getKeyType() == KeyType.Character && key.getCharacter()
